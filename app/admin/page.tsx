@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import DialogBuilt from '../components/admin/dialogbuilt';
+// import DialogBuilt from '../components/admin/dialogbuilt';
 export const metadata: Metadata = {
   title: 'Campus Compass Admin Dashboard',
 };

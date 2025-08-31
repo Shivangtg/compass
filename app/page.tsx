@@ -20,8 +20,8 @@ export default function Home() {
   const handleSearch = async () => {
     if (!window || !query.trim()) return;
 
-    const mapRef = (window as any).mapRef;
-    const markerRef = (window as any).markerRef;
+    const mapRef = window.mapRef;
+    const markerRef = window.markerRef;
 
     const coordMatch = query.match(
       /^\s*(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)\s*$/

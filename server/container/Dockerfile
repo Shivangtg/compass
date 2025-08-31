@@ -5,8 +5,8 @@ WORKDIR /app
 
 # Install libvips development dependencies for building
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    pkg-config \
-    libvips-dev \
+  pkg-config \
+  libvips-dev \
   && rm -rf /var/lib/apt/lists/*
 
 # Cache Go dependencies
@@ -25,8 +25,11 @@ FROM debian:bookworm-slim
 
 # Install only runtime deps (smaller image)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libvips42 \
+  libvips42 \
+  python3 \
+  python3-pip \
   && rm -rf /var/lib/apt/lists/*
+
 
 # Copy server binary + configs
 COPY --from=builder /app/server /server

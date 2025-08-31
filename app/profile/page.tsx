@@ -1,36 +1,28 @@
-'use client'
+"use client";
 import Image from "next/image";
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
-import {
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Share2 } from "lucide-react"
-import { useState } from 'react';
-
+} from "@/components/ui/carousel";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Share2 } from "lucide-react";
+import { useState } from "react";
 
 export default function Home() {
-
   const [locationUrl, setLocationUrl] = useState<string | null>(null);
-  const [status, setStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>("");
 
   const shareLocation = () => {
-    setStatus('Getting your location...');
+    setStatus("Getting your location...");
 
     if (!navigator.geolocation) {
-      setStatus('Geolocation is not supported by your browser.');
+      setStatus("Geolocation is not supported by your browser.");
       return;
     }
 
@@ -39,10 +31,10 @@ export default function Home() {
         const { latitude, longitude } = position.coords;
         const mapUrl = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=15/${latitude}/${longitude}`;
         setLocationUrl(mapUrl);
-        setStatus('Location retrieved! You can copy the link below.');
+        setStatus("Location retrieved! You can copy the link below.");
       },
       () => {
-        setStatus('Unable to retrieve your location.');
+        setStatus("Unable to retrieve your location.");
       }
     );
   };
@@ -80,30 +72,28 @@ export default function Home() {
   );
 
   // Add this function in your component
-const shareViaNative = async () => {
-  if (!locationUrl) {
-    alert('No location URL to share!');
-    return;
-  }
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: 'My Current Location',
-        text: 'Check out my location!',
-        url: locationUrl, // now guaranteed string
-      });
-      alert('Shared successfully!');
-    } catch (error) {
-      alert('Sharing failed or cancelled.');
-      console.error('Share error:', error);
+  const shareViaNative = async () => {
+    if (!locationUrl) {
+      alert("No location URL to share!");
+      return;
     }
-  } else {
-    alert('Web Share API is not supported on your browser.');
-  }
-};
 
-
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "My Current Location",
+          text: "Check out my location!",
+          url: locationUrl, // now guaranteed string
+        });
+        alert("Shared successfully!");
+      } catch (error) {
+        alert("Sharing failed or cancelled.");
+        console.error("Share error:", error);
+      }
+    } else {
+      alert("Web Share API is not supported on your browser.");
+    }
+  };
 
   return (
     <div className="min-h-screen p-4 pb-16 sm:p-8 sm:pb-20 font-sans">
@@ -122,21 +112,21 @@ const shareViaNative = async () => {
                 priority
               />
               <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 transition-opacity rounded-full flex items-center justify-center cursor-pointer">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="24" 
-                  height="24" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="white" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
                   strokeWidth="2"
                   className="w-5 h-5 sm:w-6 sm:h-6"
                 >
-                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                 </svg>
               </div>
             </div>
-            
+
             <div>
               <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent mb-1 sm:mb-2">
                 Sabrina
@@ -146,7 +136,7 @@ const shareViaNative = async () => {
               </h2>
             </div>
           </div>
-          
+
           <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-600 my-4 sm:my-6" />
         </div>
 
@@ -156,42 +146,46 @@ const shareViaNative = async () => {
             Exploration
           </h1>
           <h2 className="text-lg sm:text-2xl text-gray-600 dark:text-gray-300 mb-4">
-            Reviews given: 
+            Reviews given:
           </h2>
-          
+
           <Carousel className="w-full max-w-xs sm:max-w-md mx-auto">
             <CarouselContent>
               {[
                 {
                   image: "mamamio.jpg",
                   title: "Mama Mio",
-                  description: "Good food but poor seating arrangement"
+                  description: "Good food but poor seating arrangement",
                 },
                 {
                   image: "oat.jpg",
-                  title: "OAT, NewSAC", 
-                  description: "Humongous in size, an epitome of freedom. I love the vibe there!"
+                  title: "OAT, NewSAC",
+                  description:
+                    "Humongous in size, an epitome of freedom. I love the vibe there!",
                 },
                 {
                   image: "ccd.jpg",
                   title: "CCD",
-                  description: "A luxury indeed but not very economic. Cool ambience though."
-                }
+                  description:
+                    "A luxury indeed but not very economic. Cool ambience though.",
+                },
               ].map((item, index) => (
                 <CarouselItem key={index}>
                   <div className="p-1">
                     <Card>
                       <CardContent className="flex flex-col items-center p-3 sm:p-4 gap-3 sm:gap-4">
                         <div className="relative w-full aspect-video overflow-hidden rounded-lg">
-                          <img 
-                            src={item.image} 
+                          <Image
+                            src={item.image}
                             alt={item.description}
                             className="object-cover w-full h-full"
                           />
                         </div>
-                        
+
                         <div className="text-center space-y-1 sm:space-y-2">
-                          <h3 className="text-lg sm:text-xl font-semibold">{item.title}</h3>
+                          <h3 className="text-lg sm:text-xl font-semibold">
+                            {item.title}
+                          </h3>
                           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                             {item.description}
                           </p>
@@ -215,23 +209,24 @@ const shareViaNative = async () => {
           <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent mb-2 sm:mb-4">
             Favourite spots
           </h1>
-          
+
           <Card className="w-full max-w-xs sm:max-w-sm mx-auto">
             <CardHeader>
               <div>
-      <Share2 className="w-5 h-5 mr-3" />
-</div>
-              <CardTitle className="text-xl sm:text-2xl relative">OAT</CardTitle>
-              
+                <Share2 className="w-5 h-5 mr-3" />
+              </div>
+              <CardTitle className="text-xl sm:text-2xl relative">
+                OAT
+              </CardTitle>
+
               <CardDescription className="text-sm sm:text-base">
                 You liked this place. Share your experience with others.
               </CardDescription>
-              
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4">
                 <div className="grid gap-2">
-                  Your experience : 
+                  Your experience :
                   <div className="flex justify-center items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <span key={star}>
@@ -250,9 +245,9 @@ const shareViaNative = async () => {
           </Card>
           <Card className="w-full max-w-xs sm:max-w-sm mx-auto">
             <CardHeader>
-               <div>
-      <Share2 className="w-5 h-5 mr-3" />
-</div>
+              <div>
+                <Share2 className="w-5 h-5 mr-3" />
+              </div>
               <CardTitle className="text-xl sm:text-2xl">ESB 2</CardTitle>
               <CardDescription className="text-sm sm:text-base">
                 You liked this place. Share your experience with others.
@@ -261,7 +256,7 @@ const shareViaNative = async () => {
             <CardContent>
               <div className="flex flex-col gap-4">
                 <div className="grid gap-2">
-                  Your experience : 
+                  Your experience :
                   <div className="flex justify-center items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <span key={star}>
@@ -278,97 +273,91 @@ const shareViaNative = async () => {
               </div>
             </CardContent>
           </Card>
-          
         </div>
-        
-       
-  <button
-    onClick={shareLocation}
-    style={{
-      marginTop: '1rem',
-      padding: '0.75rem 1.5rem',
-      fontSize: '1rem',
-      backgroundColor: '#0070f3',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      width: '100%',
-    }}
-  >
-    Share My Location
-  </button>
-  <p style={{ marginTop: '1rem' }}>{status}</p>
 
-  {locationUrl && (
-    <div
-      style={{
-        marginTop: '1rem',
-        display: 'flex',
-        gap: '0.5rem',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-      }}
-    >
-      <input
-        type="text"
-        value={locationUrl}
-        readOnly
-        onClick={(e) => (e.target as HTMLInputElement).select()}
-        style={{
-          flexGrow: 1,
-          minWidth: 0,
-          padding: '0.75rem 1rem',
-          fontSize: '1rem',
-          borderRadius: '8px',
-          border: '1px solid #ccc',
-          userSelect: 'all',
-          wordBreak: 'break-all',
-        }}
-      />
-      <button
-        onClick={() => {
-          navigator.clipboard.writeText(locationUrl);
-          alert('Copied to clipboard!');
-        }}
-        style={{
-          padding: '0.75rem 1rem',
-          fontSize: '1rem',
-          backgroundColor: '#0070f3',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          flexShrink: 0,
-        }}
-      >
-        Copy
-      </button>
-      <button
-      onClick={shareViaNative}
-      style={{
-        padding: '0.75rem 1.5rem',
-        fontSize: '1rem',
-        backgroundColor: '#28a745', // green for share
-        color: 'white',
-        border: 'none',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        flexShrink: 0,
-      }}
-    >
-      Share via…
-    </button>
-    </div>
-  )}
+        <button
+          onClick={shareLocation}
+          style={{
+            marginTop: "1rem",
+            padding: "0.75rem 1.5rem",
+            fontSize: "1rem",
+            backgroundColor: "#0070f3",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            width: "100%",
+          }}
+        >
+          Share My Location
+        </button>
+        <p style={{ marginTop: "1rem" }}>{status}</p>
+
+        {locationUrl && (
+          <div
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            <input
+              type="text"
+              value={locationUrl}
+              readOnly
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+              style={{
+                flexGrow: 1,
+                minWidth: 0,
+                padding: "0.75rem 1rem",
+                fontSize: "1rem",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                userSelect: "all",
+                wordBreak: "break-all",
+              }}
+            />
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(locationUrl);
+                alert("Copied to clipboard!");
+              }}
+              style={{
+                padding: "0.75rem 1rem",
+                fontSize: "1rem",
+                backgroundColor: "#0070f3",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+            >
+              Copy
+            </button>
+            <button
+              onClick={shareViaNative}
+              style={{
+                padding: "0.75rem 1.5rem",
+                fontSize: "1rem",
+                backgroundColor: "#28a745", // green for share
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+            >
+              Share via…
+            </button>
+          </div>
+        )}
         <div className="w-full max-w-xs sm:max-w-sm mx-auto">
-      <Button>Sign Out</Button>
-    </div>
-        
+          <Button>Sign Out</Button>
+        </div>
       </main>
-      
-      
     </div>
-    
   );
 }

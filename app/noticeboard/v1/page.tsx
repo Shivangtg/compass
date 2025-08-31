@@ -1,19 +1,17 @@
-"use client"
+"use client";
 
 // export default function Page() {
 //   return <p>All the notices will appear here</p>;
 // }
 
-import { Accordion } from "@/components/ui/accordion"
-import NoticeCard  from '../../components/user/noticeboard/NoticeCard';
-import { ThemeDD } from '../../components/ThemeDD';
-import React, { useEffect, useState } from 'react';
+import { Accordion } from "@/components/ui/accordion";
+import NoticeCard from "../../components/user/noticeboard/NoticeCard";
+import { ThemeDD } from "../../components/ThemeDD";
+import React, { useEffect, useState } from "react";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { DatePicker } from "../../components/user/noticeboard/DatePicker";
 import Pagination from "../../components/user/noticeboard/pagination";
 import { useRouter } from "next/navigation";
-
-
 
 export default function NoticeList({
   searchParams,
@@ -21,41 +19,33 @@ export default function NoticeList({
   searchParams?: { page?: string };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
-  const [notices,setNotices]=useState([])
+  const [notices, setNotices] = useState([]);
   const router = useRouter();
 
   const today = new Date();
   const fiveDaysAgo = new Date(today);
   fiveDaysAgo.setDate(today.getDate() - 5);
 
-  const [openItem, setOpenItem] = useState<string>("")
+  const [openItem, setOpenItem] = useState<string>("");
   const [dateStart, setDateStart] = React.useState<Date | undefined>(
     fiveDaysAgo
-  )
-  const [openStart, setOpenStart] = React.useState<boolean>(
-    false
-  )
+  );
+  const [openStart, setOpenStart] = React.useState<boolean>(false);
 
-  const [dateEnd, setDateEnd] = React.useState<Date | undefined>(
-    new Date()
-  )
-  const [openEnd, setOpenEnd] = React.useState<boolean>(
-    false
-  )
+  const [dateEnd, setDateEnd] = React.useState<Date | undefined>(new Date());
+  const [openEnd, setOpenEnd] = React.useState<boolean>(false);
 
-  const [totalPages,setTotalPages]=useState<number>(1)
-  useEffect(()=>{
-    if(openItem==""){
-      console.log("shivang")
+  const [totalPages, setTotalPages] = useState<number>(1);
+  useEffect(() => {
+    if (openItem == "") {
+      console.log("shivang");
       window.history.replaceState(null, "", window.location.pathname);
     }
-  },[openItem])
-
-
+  }, [openItem]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    
+
     if (dateStart) {
       params.set("start", dateStart.toISOString().split("T")[0]);
     }
@@ -68,36 +58,33 @@ export default function NoticeList({
 
     // Update the URL (without full reload)
     router.push(`?${params.toString()}`);
-  }, [dateStart, dateEnd]);
+  }, [dateStart, dateEnd, currentPage, router]);
 
-
-  
   useEffect(() => {
-      const origin=process.env.NEXT_PUBLIC_ORIGIN
-      const fetchNotices = async () => {
+    const origin = process.env.NEXT_PUBLIC_ORIGIN;
+    const fetchNotices = async () => {
       const params = new URLSearchParams({
         page: currentPage.toString(),
         start: dateStart?.toISOString().split("T")[0] || "",
         end: dateEnd?.toISOString().split("T")[0] || "",
       });
 
-      const res = await fetch(`${origin}/api/maps/notice?${params.toString()}`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${origin}/api/maps/notice?${params.toString()}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
       const data = await res.json();
       setTotalPages(data.total); // or whatever your API returns
       setNotices(data.noticeboard_list); // optionally load notices from backend
-      console.log(notices)
+      console.log(notices);
     };
 
     fetchNotices();
-  }, [currentPage, dateStart, dateEnd]);
-
-  useEffect(()=>{
-    
-  },[])
+  }, [currentPage, dateStart, dateEnd, notices]);
 
   const notices2 = [
     {
@@ -129,8 +116,7 @@ export default function NoticeList({
       noticePreview: "Due to administrative reasons...",
       description: `<p>
           The university will remain closed on Friday due to staff training. Classes will resume on Saturday.
-        </p>`
-      ,
+        </p>`,
     },
     {
       id: "notice-4",
@@ -139,8 +125,7 @@ export default function NoticeList({
       noticePreview: "Due to administrative reasons...",
       description: `<p>
           The university will remain closed on Friday due to staff training. Classes will resume on Saturday.
-        </p>`
-      ,
+        </p>`,
     },
     {
       id: "notice-5",
@@ -167,13 +152,9 @@ export default function NoticeList({
             <p className="text-red-500">Limited passes available for Arijit Singh&apos;s performance!</p>
             <ShareButton/>
             </div>
-        `
-      ,
+        `,
     },
-  ]
-
-
-
+  ];
 
   return (
     <>
@@ -181,22 +162,33 @@ export default function NoticeList({
       <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
         <div className="flex items-center gap-2">
           <Label>Start Date:</Label>
-          <DatePicker open={openStart} setOpen={setOpenStart} setDate={setDateStart} date={dateStart} />
+          <DatePicker
+            open={openStart}
+            setOpen={setOpenStart}
+            setDate={setDateStart}
+            date={dateStart}
+          />
         </div>
         <div className="flex items-center gap-2">
           <Label>End Date:</Label>
-          <DatePicker open={openEnd} setOpen={setOpenEnd} setDate={setDateEnd} date={dateEnd} />
+          <DatePicker
+            open={openEnd}
+            setOpen={setOpenEnd}
+            setDate={setDateEnd}
+            date={dateEnd}
+          />
         </div>
       </div>
       <Accordion
-      type="single"
-      collapsible
-      className="w-full space-y-4"
-      value={openItem}
-      onValueChange={(val) => {
-        setOpenItem(val)
-        // console.log(val)
-      }}>
+        type="single"
+        collapsible
+        className="w-full space-y-4"
+        value={openItem}
+        onValueChange={(val) => {
+          setOpenItem(val);
+          // console.log(val)
+        }}
+      >
         {notices2.map((notice) => (
           <NoticeCard
             key={notice.id}
@@ -204,7 +196,7 @@ export default function NoticeList({
             cardTitle={notice.cardTitle}
             cardDescription={notice.cardDescription}
             noticePreview={notice.noticePreview}
-            isOpen={openItem==notice.id}
+            isOpen={openItem == notice.id}
             description={notice.description}
           />
         ))}
@@ -224,5 +216,5 @@ export default function NoticeList({
         <Pagination totalPages={totalPages} />
       </div>
     </>
-  )
+  );
 }

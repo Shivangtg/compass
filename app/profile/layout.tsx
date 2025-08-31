@@ -11,9 +11,9 @@ export const metadata = {
 }
 
 // Define the props type
-interface RootLayoutProps {
-  children: React.ReactNode
-}
+// interface RootLayoutProps {
+//   children: React.ReactNode
+// }
 
 // export default function RootLayout({ children }: RootLayoutProps) {
 //   return (

@@ -10,7 +10,6 @@ import { Plus, Minus, LocateFixed } from "lucide-react";
 type MapProps = {
   onMarkerClick: () => void;
 };
-
 export default function Map({ onMarkerClick }: MapProps) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -64,8 +63,8 @@ export default function Map({ onMarkerClick }: MapProps) {
         mapRef.current = map;
         markerRef.current = marker;
 
-        (window as any).mapRef = mapRef;
-        (window as any).markerRef = markerRef;
+        window.mapRef = mapRef;
+        window.markerRef = markerRef;
 
         map.on("click", (e) => {
           const { lng, lat } = e.lngLat;
