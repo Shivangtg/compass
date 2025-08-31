@@ -1,7 +1,5 @@
 import '../globals.css'
 import  InstallPWA  from './components/InstallPWA'
-import { MobileNavbar } from './components/MobileNavBar'
-
 
 export const metadata = {
   title: 'Next.js PWA',
@@ -36,9 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="min-h-screen">
-        <main className="px-4 py-6 text-base md:text-lg">
+        <main>
           {children}
-            <MobileNavbar />
            <InstallPWA />
         </main>
       </body>

@@ -11,10 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
+// TODO: Set the Cookie, if already cookie, delete it, or fetch for refresh
+
 func loginHandler(c *gin.Context) {
 	var req LoginRequest
 	var dbUser model.User
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}

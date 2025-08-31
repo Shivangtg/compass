@@ -59,6 +59,7 @@ func updateProfile(c *gin.Context) {
 }
 
 func getProfileHandler(c *gin.Context) {
+	// TODO: If i delete the user, userId do not exist but the token still exists hence the issue of null user.
 	var user model.User
 	userID, exist := c.Get("userID")
 	if !exist {
@@ -67,9 +68,10 @@ func getProfileHandler(c *gin.Context) {
 	}
 	if err := connections.DB.
 		Model(&model.User{}).
-		Preload("ContributedLocations", connections.RecentFive).
-		Preload("ContributedNotice", connections.RecentFive).
+		Preload("ContributedLocations", connections.RecentFiveLocations).
+		Preload("ContributedNotice", connections.RecentFiveNotices).
 		Preload("ContributedReview", connections.RecentFiveReviews).
+		Omit("password").
 		Where("user_id = ?", userID.(uuid.UUID)).Omit("password").Find(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to fetch profile at the moment"})
 		return

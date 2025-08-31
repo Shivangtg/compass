@@ -1,7 +1,7 @@
 {
-  "name": "My Next.js PWA",
-  "short_name": "NextPWA",
-  "description": "A Progressive Web App built with Next.js",
+  "name": "Campus Compass IIT Kanpur",
+  "short_name": "Compass",
+  "description": "A app to help you explore the unexplored in IIT Kanpur Campus",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
