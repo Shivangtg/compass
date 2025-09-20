@@ -20,7 +20,7 @@ export default function ReviewsCard({locationID, rating, review_body}: ReviewPro
         <Card className="mx-0 my-3 py-0 gap-0">
             <div className="mx-4 py-3">
                 <div className="flex items-center mb-3 mt-2">
-                    <RatedStars count={5} rating={rating} iconSize={18} color={'yellow'}/>
+                    <RatedStars count={5} rating={rating} iconSize={18} color={'yellow'} icon={''}/>
                     <p className="mx-2 font-light text-xs">({rating}/5)</p>
                 </div>
                 <Separator/>

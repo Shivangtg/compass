@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -15,10 +16,16 @@ export default function Home() {
   const [locations, setLocations] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
 
+  // TODO:
+  // 1. Design it using shadcn components
+  // 2. Default image handling
+  // 3. Error handling
+  // 4. Removal of extra files, and etc
+  // 5. Proper integration of the pages, nav bar
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:8080/profile", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/profile`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -26,16 +33,25 @@ export default function Home() {
           },
         });
         const data = await res.json();
+        if (res.ok) {
+          console.log("Done");
+        } else {
+          console.log("I am leaving");
+        }
 
         setUser(data.profile);
         setLocations(data.profile.ContributedLocations || []);
-        setReviews(data.profile.ContributedReviews || []);
+        setReviews(data.profile.ContributedReview || []);
       } catch (err) {
         console.error("Failed to fetch profile:", err);
       }
     };
 
     fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    console.log("hello i am here");
   }, []);
 
   return (
@@ -52,7 +68,7 @@ export default function Home() {
                 src={
                   user?.profilepic
                     ? `${process.env.ASSET_URL}/assets/${user.profilepic}.webp`
-                    : "/default-profile.webp"
+                    : "/pclub.png"
                 }
                 alt="Profile Picture"
                 width={80}
@@ -61,8 +77,8 @@ export default function Home() {
               />
             </div>
             <div className="gap-0 flex flex-col pt-6 mx-2">
-              <h2 className="font-semibold text-lg w-40 my-0">{user.name}</h2>
-              <p className="text-gray-500 text-sm">{user.email}</p>
+              <h2 className="font-semibold text-lg w-40 my-0">{user?.name}</h2>
+              <p className="text-gray-500 text-sm">{user?.email}</p>
             </div>
           </div>
           <Separator />
@@ -89,8 +105,8 @@ export default function Home() {
                 {locations.map((location, index) => (
                   <LocationCard
                     key={index}
-                    locationID={location.id}
-                    img={`${process.env.ASSET_URL}/assets/${location.coverpic}.webp`}
+                    locationID={location.LocationId}
+                    img={`${process.env.NEXT_PUBLIC_ASSET_URL}/assets/${location.coverpic}.webp`}
                     name={location.name}
                     rating={location.rating}
                     description={location.description}

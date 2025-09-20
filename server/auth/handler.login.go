@@ -20,7 +20,6 @@ func loginHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
-	// TODO: If the user is already logged in ?
 	result := connections.DB.Model(&model.User{}).Select("email", "user_id", "password", "role", "is_verified").Where("email = ?", req.Email).First(&dbUser)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
@@ -42,6 +41,7 @@ func loginHandler(c *gin.Context) {
 		return
 	}
 	// set cookie
+	middleware.ClearAuthCookie(c) // Clear the previous cookie
 	middleware.SetAuthCookie(c, token)
 	c.JSON(http.StatusOK, gin.H{"message": "Login Successful"})
 }

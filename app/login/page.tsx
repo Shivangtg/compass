@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +8,26 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useGContext } from "@/components/ContextProvider";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { isLoggedIn, setLoggedIn } = useGContext();
+
+  // To redirect to the initiator page setup, extract the url of previous page
   const searchParams = useSearchParams();
+  const callbackUrl =
+    searchParams.get("callbackUrl") ||
+    process.env.NEXT_PUBLIC_PROFILE_URL ||
+    "/";
+  useEffect(() => {
+    console.log(isLoggedIn);
+    if (isLoggedIn === true) router.replace(callbackUrl);
+    // The dependency array ensures effect only runs once on mount,
+    // unless the router or callbackUrl changes.
+  }, [callbackUrl, router, isLoggedIn]);
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
@@ -23,16 +38,15 @@ export default function LoginPage() {
         {
           method: "POST",
           body: formData,
+          credentials: "include",
         }
       );
+      // TODO: Handel the error more elegantly
       const data = await response.json();
       if (response.ok) {
         toast(data.message);
+        setLoggedIn(true); // global context
         // From where ever you redirect use router.push(`/login?callbackUrl=${encodeURIComponent(router.asPath)}`);
-        const callbackUrl =
-          searchParams.get("callbackUrl") ||
-          process.env.NEXT_PUBLIC_PROFILE_URL ||
-          "/";
         router.replace(callbackUrl);
       } else {
         toast(data.error);
@@ -42,6 +56,8 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   }
+
+  // Extract the form component into other
   return (
     <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="w-full max-w-sm">

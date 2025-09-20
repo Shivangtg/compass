@@ -58,6 +58,7 @@ func updateProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Profile updated successfully"})
 }
 
+
 func getProfileHandler(c *gin.Context) {
 	// TODO: If i delete the user, userId do not exist but the token still exists hence the issue of null user.
 	var user model.User
